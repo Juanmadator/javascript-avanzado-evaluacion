@@ -1,11 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Tasks List</title>
+    <link rel="stylesheet" href="./style/style.css">
+    <script defer  src="./scripts/index.js"></script>
 </head>
+
 <body>
-    
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#" class="active">Tasks List</a></li>
+            </ul>
+        </nav>
+    </header>
+
+
+    <h1>TASKS LIST</h1>
+    <section class="tasks">
+
+        <article class="tasks__task">
+            <h4>Titulo</h4>
+            <p class="tasks__task-description">Descripcion: ipsum dolor sit amet consectetur adipisicing elit.
+                Laboriosam, debitis recusandae odio quisquam illo cupiditate molestias! Libero repudiandae rerum at
+                amet, autem provident itaque consequuntur, laborum consequatur reprehenderit, temporibus voluptatum.</p>
+                <span>2025-02-27</span>
+            <span class="completed state">Completed</span>
+        </article>
+        <article class="tasks__task">
+            <h4>Titulo</h4>
+            <p class="tasks__task-description">Descripcion: ipsum dolor sit amet consectetur adipisicing elit.
+                Laboriosam, debitis recusandae odio quisquam illo cupiditate molestias! Libero repudiandae rerum at
+                amet, autem provident itaque consequuntur, laborum consequatur reprehenderit, temporibus voluptatum.</p>
+                <span>2025-03-23</span>
+            <span class="completed state">Completed</span>
+        </article>
+        <article class="tasks__task">
+            <h4>Titulo</h4>
+            <p class="tasks__task-description">Descripcion: ipsum dolor sit amet consectetur adipisicing elit.
+                Laboriosam, debitis recusandae odio quisquam illo cupiditate molestias! Libero repudiandae rerum at
+                amet, autem provident itaque consequuntur, laborum consequatur reprehenderit, temporibus voluptatum.</p>
+                <span>2025-03-23</span>
+            <span class="in-progress state">In progress</span>
+        </article>
+        <article class="tasks__task">
+            <h4>Titulo</h4>
+            <p class="tasks__task-description">Descripcion: ipsum dolor sit amet consectetur adipisicing elit.
+                Laboriosam, debitis recusandae odio quisquam illo cupiditate molestias! Libero repudiandae rerum at
+                amet, autem provident itaque consequuntur, laborum consequatur reprehenderit, temporibus voluptatum.</p>
+            <span>2025-03-23</span>
+            <span class="pending state">Pending</span>
+        </article>
+
+
+    </section>
+
+
+    <form>
+        <input type="text" name="title" id="title" placeholder="Title">
+        <input type="text" name="description" id="description" placeholder="Description">
+        <input type="text" name="state" id="state" placeholder="State">
+        <input type="date" name="date-end" id="date-end">
+
+        <button id="createTask">Create</button>
+        <button id="editTask">Edit</button>
+    </form>
 </body>
+
 </html>
