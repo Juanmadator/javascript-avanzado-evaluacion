@@ -1,99 +1,117 @@
-:root{
-    --red: red;
-    --orange:orange;
-    --green:green;
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+:root {
+  --r4ed: red;
+  --orange: orange;
+  --green: green;
 }
 
-*{
-    padding: 0;
-    margin: 0;
-    box-sizing: content-box;
-    scroll-behavior: smooth;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: content-box;
+  scroll-behavior: smooth;
+  font-family: "Montserrat", sans-serif;
 }
 
-nav{
+nav {
+  padding: 10px;
+}
+
+nav a {
+  text-decoration: none;
+  transition: 0.3s all ease;
+}
+
+ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+h1,
+h2 {
+  text-align: center;
+}
+
+.active {
+  color: red;
+}
+
+.state {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.completed {
+  color: var(--green);
+}
+
+.pending {
+  color: var(--red);
+}
+
+.in-progress {
+  color: var(--orange);
+}
+
+.tasks {
+  max-width: 90%;
+  margin: 0 auto;
+  display: grid;
+  margin-top: 30px;
+}
+
+span {
+  display: block;
+}
+
+article {
+  cursor: pointer;
+  transition: 0.3s all ease;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+article:hover {
+  background-color: rgb(177, 243, 222);
+}
+
+form {
+  display: grid;
+  max-width: 400px;
+  margin: 0 auto;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+input {
+  padding: 10px;
+  border-radius: 8px;
+  outline: none;
+  border: 2px solid lightgray;
+}
+
+.btn{
     padding: 10px;
-}
-
-nav a{
-    text-decoration: none;
-    transition: 0.3s all ease;
-}
-
-ul{
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-}
-
-h1,h2{
-    text-align: center;
-}
-
-.active{
-    color: red;
-}
-
-.state{
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.completed{
-    color: var(--green);
-}
-
-.pending{
-    color: var(--red);
-
-}
-
-.in-progress{
-    color: var(--orange);
-
-}
-
-.tasks{
-    max-width: 90%;
-    margin: 0 auto;
-    display: grid;
-    margin-top: 30px;
-  
-}
-
-span{
-    display: block;
-}
-
-article{
-    cursor: pointer;
-    transition: 0.3s all ease;
-    padding: 16px;
     border-radius: 8px;
+    justify-self: center;
+    border: 2px solid lightgray;
+    width: 200px;
+    transition: 0.3s all ease;
+    cursor: pointer;
 }
 
-article:hover{
-    background-color: rgb(177, 243, 222);
-
-}
-
-form{
-    display: grid;
-    max-width: 400px;
-    margin: 0 auto;
-    gap: 20px;
-    margin-top: 30px;
-}
 
 
 /* MEDIA QUERIES */
-@media screen and (min-width:768px) {
-    .tasks{
+@media screen and (min-width: 768px) {
+  .tasks {
     max-width: 80%;
     grid-template-columns: repeat(4, 1fr);
-    }
-    article{
-        max-width: 300px;
-    }
+  }
+  article {
+    max-width: 300px;
+  }
 }
