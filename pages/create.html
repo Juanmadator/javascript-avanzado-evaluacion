@@ -1,25 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tasks List</title>
-    <link rel="stylesheet" href="../style/style.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Tasks List</title>
+	<link rel="stylesheet" href="../style/style.css">
+	<script defer type="module"  src="../scripts/index.js"></script>
+
 </head>
 <body>
-   <header>
-    <nav>
-        <ul>
-            <li><a href="#" class="active">Create</a></li>
-            <li><a href="../index.html">Tasks List</a></li>
-        </ul>
-    </nav>
-   </header> 
+	 <header>
+	<nav>
+		<ul>
+			<li><a href="../index.html">Tasks List</a></li>
+			<li><a href="#" class="active">Create</a></li>
+			<div id="clima">
+				<h4 id="ciudad" class="spinner"></h4>
+			</div>
+		</ul>
+	</nav>
+	 </header> 
 
+	 <form>
+	<input type="text" name="title" id="title"  placeholder="Title">
+	<input type="text" name="description" id="description"  placeholder="Description">
+	<input type="text" name="state" id="state" placeholder="State">
+	<input type="date" name="date-end" id="date-end">
 
-   <h2>CREATE TASK</h2>
-
+	<button id="createTask" class="btn btn-create">Create</button>
+	<button id="editTask" class="btn btn-edit">Edit</button>
+</form>
  
-  
+<span id="taskExists">La tarea ya existe</span>
+<span id="errorCreate">Error al crear la tarea</span>
 </body>
 </html>

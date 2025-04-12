@@ -2,72 +2,78 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tasks List</title>
-    <link rel="stylesheet" href="./style/style.css">
-    <script defer type="module"  src="./scripts/index.js"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Tasks List</title>
+	<link rel="stylesheet" href="./style/style.css">
+	<script defer type="module" src="./scripts/index.js"></script>
 </head>
 
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="#" class="active">Tasks List</a></li>
-            </ul>
-        </nav>
-    </header>
+	<header>
+		<nav>
+			<ul>
+				<li><a href="#" class="active">Tasks List</a></li>
+				<li><a href="./pages/create.html">Crear/Editar</a></li>
+				<div id="clima">
+					<h4 id="ciudad" class="spinner"></h4>
+				</div>
+			</ul>
+
+		</nav>
+	</header>
+
+	<label for="filter">Filtrar tareas: </label>
+	<form action="">
+		<select name="filter" id="filter">
+			<option value="todas">Todas</option>
+			<option value="pendiente">Pendiente</option>
+			<option value="en-progreso">En Progreso</option>
+			<option value="completado">Completado</option>
+		</select>
+	</form>
+
+	<section class="tasks">
+
+		<article class="tasks__task">
+			<h4>Titulo1</h4>
+			<p class="tasks__task-description">Descripcion: ipsum dolor sit amet consectetur adipisicing elit.
+				Laboriosam, debitis recusandae odio quisquam illo cupiditate molestias! Libero repudiandae rerum at
+				amet, autem provident itaque consequuntur, laborum consequatur reprehenderit, temporibus voluptatum.</p>
+			<span>2025-02-27</span>
+			<span class="completado state">Completed</span>
+		</article>
+		<article class="tasks__task">
+			<h4>Titulo2</h4>
+			<p class="tasks__task-description">Descripcion: ipsum dolor sit amet consectetur adipisicing elit.
+				Laboriosam, debitis recusandae odio quisquam illo cupiditate molestias! Libero repudiandae rerum at
+				amet, autem provident itaque consequuntur, laborum consequatur reprehenderit, temporibus voluptatum.</p>
+			<span>2025-03-23</span>
+			<span class="completado state">Completed</span>
+		</article>
+		<article class="tasks__task">
+			<h4>Titulo3</h4>
+			<p class="tasks__task-description">Descripcion: ipsum dolor sit amet consectetur adipisicing elit.
+				Laboriosam, debitis recusandae odio quisquam illo cupiditate molestias! Libero repudiandae rerum at
+				amet, autem provident itaque consequuntur, laborum consequatur reprehenderit, temporibus voluptatum.</p>
+			<span>2025-03-23</span>
+			<span class="en-progreso state">In progress</span>
+		</article>
+		<article class="tasks__task">
+			<h4>Titulo4</h4>
+			<p class="tasks__task-description">Descripcion: ipsum dolor sit amet consectetur adipisicing elit.
+				Laboriosam, debitis recusandae odio quisquam illo cupiditate molestias! Libero repudiandae rerum at
+				amet, autem provident itaque consequuntur, laborum consequatur reprehenderit, temporibus voluptatum.</p>
+			<span>2025-03-23</span>
+			<span class="pendiente state">Pending</span>
+		</article>
 
 
-    <h1>TASKS LIST</h1>
-    <section class="tasks">
-
-        <article class="tasks__task">
-            <h4>Titulo1</h4>
-            <p class="tasks__task-description">Descripcion: ipsum dolor sit amet consectetur adipisicing elit.
-                Laboriosam, debitis recusandae odio quisquam illo cupiditate molestias! Libero repudiandae rerum at
-                amet, autem provident itaque consequuntur, laborum consequatur reprehenderit, temporibus voluptatum.</p>
-                <span>2025-02-27</span>
-            <span class="completed state">Completed</span>
-        </article>
-        <article class="tasks__task">
-            <h4>Titulo2</h4>
-            <p class="tasks__task-description">Descripcion: ipsum dolor sit amet consectetur adipisicing elit.
-                Laboriosam, debitis recusandae odio quisquam illo cupiditate molestias! Libero repudiandae rerum at
-                amet, autem provident itaque consequuntur, laborum consequatur reprehenderit, temporibus voluptatum.</p>
-                <span>2025-03-23</span>
-            <span class="completed state">Completed</span>
-        </article>
-        <article class="tasks__task">
-            <h4>Titulo3</h4>
-            <p class="tasks__task-description">Descripcion: ipsum dolor sit amet consectetur adipisicing elit.
-                Laboriosam, debitis recusandae odio quisquam illo cupiditate molestias! Libero repudiandae rerum at
-                amet, autem provident itaque consequuntur, laborum consequatur reprehenderit, temporibus voluptatum.</p>
-                <span>2025-03-23</span>
-            <span class="in-progress state">In progress</span>
-        </article>
-        <article class="tasks__task">
-            <h4>Titulo4</h4>
-            <p class="tasks__task-description">Descripcion: ipsum dolor sit amet consectetur adipisicing elit.
-                Laboriosam, debitis recusandae odio quisquam illo cupiditate molestias! Libero repudiandae rerum at
-                amet, autem provident itaque consequuntur, laborum consequatur reprehenderit, temporibus voluptatum.</p>
-            <span>2025-03-23</span>
-            <span class="pending state">Pending</span>
-        </article>
+	</section>
 
 
-    </section>
-
-
-    <form>
-        <input type="text" name="title" id="title"  placeholder="Title">
-        <input type="text" name="description" id="description"  placeholder="Description">
-        <input type="text" name="state" id="state" placeholder="State">
-        <input type="date" name="date-end" id="date-end">
-
-        <button id="createTask" class="btn btn-create">Create</button>
-        <button id="editTask" class="btn btn-edit">Edit</button>
-    </form>
+	<span id="taskExists">La tarea ya existe</span>
+	<span id="errorCreate">Error al crear la tarea</span>
 </body>
 
 </html>
