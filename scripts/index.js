@@ -1,4 +1,4 @@
-import { createTask, updateTask } from "./functions.js";
+import { createTask, updateTask,createTaskElement } from "./functions.js";
 
 //creo un array para las tareas
 export let tasksArray = [];
@@ -10,6 +10,9 @@ window.addEventListener("load", () => {
 
   let btnCreate = document.getElementById("createTask");
   let btnUpdate = document.getElementById("editTask");
+
+  getWeather();
+
   if (btnCreate && btnUpdate && taskTitle) {
     btnCreate.addEventListener("click", createTask);
     btnUpdate.addEventListener("click", updateTask);
@@ -36,8 +39,31 @@ window.addEventListener("load", () => {
     filterSelect.addEventListener("change", filterTasks);
   }
 
-  getWeather();
+
+
+loadTasksFromLocalStorage();
+
 });
+
+
+
+// Función para cargar tareas desde localStorage
+function loadTasksFromLocalStorage() {
+	const tasksContainer = document.querySelector(".tasks");
+
+  const currentTasks = JSON.parse(localStorage.getItem("tasks")) || [];
+  currentTasks.forEach(task => {
+    const newTaskElement = createTaskElement(
+      task.title,
+      task.description,
+      task.dateEnd,
+      task.state
+    );
+    if (tasksContainer) {
+      tasksContainer.appendChild(newTaskElement);
+   }
+  });
+}
 
 function getWeather() {
   navigator.geolocation.getCurrentPosition(
@@ -118,6 +144,7 @@ const disableBtn = (valor = true, btn) => {
   }
 };
 
+//! CAMBIAR FUNCION PARA GUARDAR LOS DATOS TEMPORALMENTE EN UN OBJETO
 const fillFormInputs = (object = {}) => {
   let { title, description, state, dateEnd } = getFormInputs();
 
@@ -164,8 +191,6 @@ Si existe desabilida la posibilidad de crear
 export const verifytaskTitle = (titleParam, e = null) => {
   let currentValue = titleParam || e?.target?.value;
 
-  console.log(currentValue);
-
   let titleFind = tasksArray.find((el) => {
     return el.taskTitle == currentValue;
   });
@@ -182,6 +207,7 @@ export const verifytaskTitle = (titleParam, e = null) => {
   }
 };
 
+//funcion para mostrar mensajes
 export const showMessage = (id) => {
   document.getElementById(`${id}`).style.display = "block";
   setTimeout(() => {
@@ -189,6 +215,7 @@ export const showMessage = (id) => {
   }, 2500);
 };
 
+//funcion para filtrar por estado
 const filterTasks = (e) => {
   let value = e.target.value;
   const tasks = document.querySelector(".tasks").children;
