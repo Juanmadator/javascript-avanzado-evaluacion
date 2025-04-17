@@ -6,10 +6,53 @@ import {
   showMessage,
 } from "./index.js";
 
-export const updateTask = (e) => {
-  e.preventDefault();
+export const updateTask = (event) => {
+	event.preventDefault();
+
+
+	const updatedTask = {
+	  title: document.querySelector("#title").value,
+	  description: document.querySelector("#description").value,
+	  dateEnd: document.querySelector("#date-end").value,
+	  state: document.querySelector("#state").value
+	};
+  
+	const taskToEdit = JSON.parse(localStorage.getItem("taskToEdit"));
+	const allTasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+	//la busco por el titulo y la actualizo con los nuevos valores
+	const updatedTasks = allTasks.map(task => {
+	  if (task.title === taskToEdit.taskTitle) {
+		return { ...task, ...updatedTask }; 
+	  }
+	  return task;
+	});
+
+	localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+	localStorage.removeItem("taskToEdit"); // limpiar
+
+	showMessage("taskCreated");
+
+	setInterval(() => {
+		window.location.href = "../index.html"; // redirigí al home si querés
+	},500)
+	
 };
 
+export const deleteTask = (titulo) => {
+	const allTasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+	const updatedTasks = allTasks.filter(task => task.title !== titulo);
+
+	localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+	localStorage.removeItem("taskToEdit"); // limpiar
+
+	showMessage("taskDeleted");
+
+	setTimeout(() => {
+		window.location.href = "../index.html"; // redirigir al home
+	}, 100);
+};
 
 export const createTask = (event) => {
 	event.preventDefault();
@@ -30,14 +73,8 @@ export const createTask = (event) => {
 		  dateEnd: dateEnd.value,
 		  state: state.value
 		};
-  
-		// 1. Cargar las tareas actuales desde localStorage (si hay)
 		const currentTasks = JSON.parse(localStorage.getItem("tasks")) || [];
-  
-		// 2. Añadir la nueva tarea
 		currentTasks.push(task);
-  
-		// 3. Guardar el array actualizado en localStorage
 		localStorage.setItem("tasks", JSON.stringify(currentTasks));
 		added = true;
 	  }
@@ -46,13 +83,17 @@ export const createTask = (event) => {
 		showMessage("errorCreate");
 	  } else {
 		  showMessage("taskCreated");
-		  //limpiar formulario
 		  clearForm();
+		  setTimeout(() => {
+			window.location.href = "../index.html"; // redirigir al home
+		}, 500);
 	  }
 	}
   };
 
 export const createTaskElement = (title, description, date, state) => {
+
+	const div = document.createElement("div");
   const article = document.createElement("article");
   article.classList.add("tasks__task");
 
@@ -61,11 +102,13 @@ export const createTaskElement = (title, description, date, state) => {
 
   const p = document.createElement("p");
   p.classList.add("tasks__task-description");
-  p.textContent = `Descripción: ${description}`;
+  p.textContent = `${description}`;
 
   const dateSpan = document.createElement("span");
   dateSpan.textContent = date;
-
+  const deleteSpam = document.createElement("span");
+	deleteSpam.textContent = "Eliminar";
+	deleteSpam.classList.add("eliminarBtn");
   const stateSpan = document.createElement("span");
   stateSpan.classList.add(state.toLowerCase(), "state");
   stateSpan.textContent = state.charAt(0).toUpperCase() + state.slice(1);
@@ -74,11 +117,13 @@ export const createTaskElement = (title, description, date, state) => {
   article.appendChild(p);
   article.appendChild(dateSpan);
   article.appendChild(stateSpan);
-
-  return article;
+  
+  div.appendChild(article);
+  div.appendChild(deleteSpam);
+  return div;
 };
 
-const clearForm = () => {
+export const clearForm = () => {
 	let {title,state,description} = getFormInputs();
 	title.value = "";
 	state.value = "";

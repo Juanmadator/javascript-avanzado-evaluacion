@@ -1,17 +1,25 @@
-import { createTask, updateTask,createTaskElement } from "./functions.js";
+import {
+  createTask,
+  updateTask,
+  createTaskElement,
+  clearForm,
+  deleteTask,
+} from "./functions.js";
 
 //creo un array para las tareas
 export let tasksArray = [];
+export let temporalTask = {};
 window.addEventListener("load", () => {
+  getWeather();
+  loadTasksFromLocalStorage();
   //selecciono todas las tareas
   const filterSelect = document.getElementById("filter");
   let tasks = document.querySelectorAll(".tasks__task");
   let taskTitle = document.getElementById("title");
+  let dateInput = document.getElementById("date-end");
 
   let btnCreate = document.getElementById("createTask");
   let btnUpdate = document.getElementById("editTask");
-
-  getWeather();
 
   if (btnCreate && btnUpdate && taskTitle) {
     btnCreate.addEventListener("click", createTask);
@@ -24,35 +32,66 @@ window.addEventListener("load", () => {
     getTaskContent(el);
   });
 
-  let { dateEnd } = fillFormInputs();
   const today = new Date();
-  if (dateEnd) {
-    dateEnd.value = formatDate(today);
+  if (dateInput) {
+    dateInput.value = formatDate(today);
   }
 
   //funcion para rellenar los datos de una tarea en el form para poder editarla
   tasks.forEach((el) => {
-    el.addEventListener("click", () => getTaskContent(el));
+    el.addEventListener("click", () => getDataAndFill(el));
   });
 
   if (filterSelect) {
+    if (localStorage.getItem("taskToEdit")) {
+      localStorage.removeItem("taskToEdit");
+    }
+
     filterSelect.addEventListener("change", filterTasks);
+    let btnDeletes = document.querySelectorAll(".eliminarBtn");
+
+    for (const btn of btnDeletes) {
+      btn.addEventListener("click", taskRemover);
+    }
   }
 
+  const taskData = JSON.parse(localStorage.getItem("taskToEdit"));
+  if (taskData && taskTitle) {
+    document.querySelector("#title").setAttribute("disabled", "true");
+    document.querySelector("#title").value = taskData.taskTitle;
+    document.querySelector("#description").value = taskData.taskDescription;
+    document.querySelector("#state").value = taskData.taskState;
+    document.querySelector("#date-end").value = taskData.taskDate;
+  }
 
-
-loadTasksFromLocalStorage();
-
+  emptyArray();
 });
 
+const emptyArray = () => {
+  let sectionEmpty = document.querySelector(".tasks");
+  if (tasksArray.length < 1 && sectionEmpty) {
+    let p = document.createElement("p");
+    p.classList.add("emptyP");
+    let text = document.createTextNode(
+      "No hay tareas. ¡Prueba a crear una nueva!"
+    );
+    p.appendChild(text);
+    sectionEmpty.appendChild(p);
+  }
+};
 
+const taskRemover = (e) => {
+  let titulo = e.target.parentElement.children[0].children[0].textContent;
+  deleteTask(titulo);
+};
 
 // Función para cargar tareas desde localStorage
-function loadTasksFromLocalStorage() {
-	const tasksContainer = document.querySelector(".tasks");
+const  loadTasksFromLocalStorage=()=> {
+  const tasksContainer = document.querySelector(".tasks");
 
   const currentTasks = JSON.parse(localStorage.getItem("tasks")) || [];
-  currentTasks.forEach(task => {
+  currentTasks.forEach((task) => {
+    tasksArray.push(task);
     const newTaskElement = createTaskElement(
       task.title,
       task.description,
@@ -61,11 +100,11 @@ function loadTasksFromLocalStorage() {
     );
     if (tasksContainer) {
       tasksContainer.appendChild(newTaskElement);
-   }
+    }
   });
 }
 
-function getWeather() {
+const getWeather=()=> {
   navigator.geolocation.getCurrentPosition(
     async function (position) {
       const lat = position.coords.latitude;
@@ -81,18 +120,15 @@ function getWeather() {
         data.address.city ||
         data.address.town ||
         data.address.village ||
-			  data.address.county;
-		 
-      console.log("Ciudad del usuario:", city);
+        data.address.county;
 
       //aqui uso la api para obtener el clima en la ciudad del usuario
       fetch(`https://wttr.in/${city}?format=3`)
         .then((res) => res.text())
-		  .then((weather) => {
-			document.getElementById("ciudad").textContent = city;
-			document.getElementById("ciudad").classList.remove("spinner");
-			document.getElementById("ciudad").textContent = weather;
-          console.log("Clima:", weather);
+        .then((weather) => {
+          document.getElementById("ciudad").textContent = city;
+          document.getElementById("ciudad").classList.remove("spinner");
+          document.getElementById("ciudad").textContent = weather;
         });
     },
     function (error) {
@@ -100,7 +136,7 @@ function getWeather() {
     }
   );
 }
-
+//MODIFICAR ESTA FUNCION
 export const getTaskContent = (e) => {
   let task = e;
   let taskTitle = task.children[0].textContent;
@@ -122,47 +158,52 @@ export const getTaskContent = (e) => {
   });
 
   if (!taskFind) {
-	  tasksArray.push(task);
-	  
-	  console.log(tasksArray)
+    tasksArray.push(task);
   } else if (taskFind) {
-    fillFormInputs(task);
+    //  fillFormInputs(task);
     disableBtn(true, "createTask");
   }
-
   return task;
+};
+
+const getDataAndFill = (el) => {
+  temporalTask = getTaskContent(el);
+  localStorage.setItem("taskToEdit", JSON.stringify(temporalTask));
+  window.location.href = "./pages/create.html";
 };
 
 // segun el primer parametro se deshabilitará o no y el segundo parámetro es el boton que quiero deshabilitar
 
 const disableBtn = (valor = true, btn) => {
   let btnSelected = document.getElementById(btn);
-  if (valor) {
+  if (valor && btnSelected) {
     btnSelected.setAttribute("disabled", true);
   } else {
-    btnSelected.removeAttribute("disabled");
+    if (btnSelected) {
+      btnSelected.removeAttribute("disabled");
+    }
   }
 };
 
 //! CAMBIAR FUNCION PARA GUARDAR LOS DATOS TEMPORALMENTE EN UN OBJETO
-const fillFormInputs = (object = {}) => {
-  let { title, description, state, dateEnd } = getFormInputs();
+// const fillFormInputs = (object = {}) => {
+//   let { title, description, state, dateEnd } = getFormInputs();
 
-  let { taskTitle, taskDescription, taskDate, taskState } = object;
+//   let { taskTitle, taskDescription, taskDate, taskState } = object;
 
-  if (taskDate) {
-    dateEnd.value = formatDate(new Date(taskDate));
-  }
+//   if (taskDate) {
+//     dateEnd.value = formatDate(new Date(taskDate));
+//   }
 
-  if (taskDate && taskDescription && taskState && taskTitle) {
-    title.value = taskTitle;
-    description.value = taskDescription;
-    dateEnd.value = taskDate;
-    state.value = taskState;
-  }
+//   if (taskDate && taskDescription && taskState && taskTitle) {
+//     title.value = taskTitle;
+//     description.value = taskDescription;
+//     dateEnd.value = taskDate;
+//     state.value = taskState;
+//   }
 
-  return { title, description, state, dateEnd };
-};
+//   return { title, description, state, dateEnd };
+// };
 
 const formatDate = (date) => {
   const year = date.getFullYear();

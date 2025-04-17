@@ -14,7 +14,7 @@
 		<nav>
 			<ul>
 				<li><a href="#" class="active">Tasks List</a></li>
-				<li><a href="./pages/create.html">Crear/Editar</a></li>
+				<li><a href="./pages/create.html">Crear</a></li>
 				<div id="clima">
 					<h4 id="ciudad" class="spinner"></h4>
 				</div>
@@ -23,8 +23,9 @@
 		</nav>
 	</header>
 
-	<label for="filter">Filtrar tareas: </label>
 	<form action="">
+	<label for="filter" class="filtrar">Filtrar tareas: </label>
+
 		<select name="filter" id="filter">
 			<option value="todas">Todas</option>
 			<option value="pendiente">Pendiente</option>
@@ -36,6 +37,7 @@
 	<section class="tasks">
 	</section>
 
+	<span id="taskDeleted">Tarea eliminada</span>
 
 	<span id="taskExists">La tarea ya existe</span>
 	<span id="errorCreate">Error al crear la tarea</span>
