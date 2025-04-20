@@ -4,9 +4,9 @@ import {
   createTaskElement,
   clearForm,
   deleteTask,
+  getRandomCharacters,
 } from "./functions.js";
 
-//creo un array para las tareas
 export let tasksArray = [];
 export let temporalTask = {};
 window.addEventListener("load", () => {
@@ -17,7 +17,6 @@ window.addEventListener("load", () => {
   let tasks = document.querySelectorAll(".tasks__task");
   let taskTitle = document.getElementById("title");
   let dateInput = document.getElementById("date-end");
-
   let btnCreate = document.getElementById("createTask");
   let btnUpdate = document.getElementById("editTask");
 
@@ -32,6 +31,7 @@ window.addEventListener("load", () => {
     getTaskContent(el);
   });
 
+  //relleno la fecha del formulario con la del día cuando se crea
   const today = new Date();
   if (dateInput) {
     dateInput.value = formatDate(today);
@@ -55,6 +55,8 @@ window.addEventListener("load", () => {
     }
   }
 
+  //aqui compruebo si hay contenido en la localStorage para editar
+  //y cargo los datos si es así
   const taskData = JSON.parse(localStorage.getItem("taskToEdit"));
   if (taskData && taskTitle) {
     document.querySelector("#title").setAttribute("disabled", "true");
@@ -65,8 +67,11 @@ window.addEventListener("load", () => {
   }
 
   emptyArray();
+
+  getRandomCharacters(1);
 });
 
+//funcion para mostrar un mensaje en caso de que no haya tareas
 const emptyArray = () => {
   let sectionEmpty = document.querySelector(".tasks");
   if (tasksArray.length < 1 && sectionEmpty) {
@@ -79,6 +84,7 @@ const emptyArray = () => {
     sectionEmpty.appendChild(p);
   }
 };
+
 //funcion para eliminar la tarea
 const taskRemover = (e) => {
   let titulo = e.target.parentElement.children[0].children[0].textContent;
@@ -104,7 +110,7 @@ const loadTasksFromLocalStorage = () => {
   });
 };
 
-//funcion que usa la api del tiempo 
+//funcion que usa la api del tiempo
 const getWeather = () => {
   navigator.geolocation.getCurrentPosition(
     async function (position) {
@@ -138,6 +144,7 @@ const getWeather = () => {
   );
 };
 
+//funcion para obtener los datos de una tarea
 export const getTaskContent = (e) => {
   let task = e;
   let taskTitle = task.children[0].textContent;
@@ -153,7 +160,6 @@ export const getTaskContent = (e) => {
   };
 
   //guardo cada tarea en el array
-
   let taskFind = tasksArray.find((el) => {
     return el.taskTitle == task.taskTitle;
   });
@@ -161,7 +167,6 @@ export const getTaskContent = (e) => {
   if (!taskFind) {
     tasksArray.push(task);
   } else if (taskFind) {
-    //  fillFormInputs(task);
     disableBtn(true, "createTask");
   }
   return task;
@@ -241,17 +246,19 @@ export const showMessage = (id) => {
 const filterTasks = (e) => {
   let value = e.target.value;
   const taskElements = document.querySelector(".tasks").children;
-  let matchCount = 0;
+  let counter = 0;
 
   // Ocultamos el mensaje anterior si existe
   const oldMsg = document.querySelector(".emptyP");
-  if (oldMsg) oldMsg.remove();
+  if (oldMsg) {
+    oldMsg.remove();
+  }
 
   for (const task of taskElements) {
     const span = task.querySelectorAll("span")[1];
     if (value === "todas" || (span && span.classList.contains(value))) {
       task.style.display = "block";
-      matchCount++;
+      counter++;
     } else {
       task.style.display = "none";
     }
@@ -266,4 +273,3 @@ const filterTasks = (e) => {
     sectionEmpty.appendChild(p);
   }
 };
-
