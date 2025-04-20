@@ -265,7 +265,7 @@ const filterTasks = (e) => {
   }
 
   // Si no se encontró ninguna tarea visible, mostramos el mensaje
-  if (matchCount === 0) {
+  if (counter === 0) {
     const sectionEmpty = document.querySelector(".tasks");
     const p = document.createElement("p");
     p.classList.add("emptyP");
