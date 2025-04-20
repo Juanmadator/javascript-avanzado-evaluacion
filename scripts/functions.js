@@ -8,8 +8,6 @@ import {
 
 export const updateTask = (event) => {
 	event.preventDefault();
-
-
 	const updatedTask = {
 	  title: document.querySelector("#title").value,
 	  description: document.querySelector("#description").value,
@@ -89,11 +87,12 @@ export const createTask = (event) => {
 		}, 500);
 	  }
 	}
-  };
+};
 
 export const createTaskElement = (title, description, date, state) => {
 
 	const div = document.createElement("div");
+	div.classList.add("task");
   const article = document.createElement("article");
   article.classList.add("tasks__task");
 

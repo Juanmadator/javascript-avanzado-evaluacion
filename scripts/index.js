@@ -79,14 +79,14 @@ const emptyArray = () => {
     sectionEmpty.appendChild(p);
   }
 };
-
+//funcion para eliminar la tarea
 const taskRemover = (e) => {
   let titulo = e.target.parentElement.children[0].children[0].textContent;
   deleteTask(titulo);
 };
 
 // Función para cargar tareas desde localStorage
-const  loadTasksFromLocalStorage=()=> {
+const loadTasksFromLocalStorage = () => {
   const tasksContainer = document.querySelector(".tasks");
 
   const currentTasks = JSON.parse(localStorage.getItem("tasks")) || [];
@@ -102,9 +102,10 @@ const  loadTasksFromLocalStorage=()=> {
       tasksContainer.appendChild(newTaskElement);
     }
   });
-}
+};
 
-const getWeather=()=> {
+//funcion que usa la api del tiempo 
+const getWeather = () => {
   navigator.geolocation.getCurrentPosition(
     async function (position) {
       const lat = position.coords.latitude;
@@ -135,8 +136,8 @@ const getWeather=()=> {
       console.error("Error al obtener ubicación:", error.message);
     }
   );
-}
-//MODIFICAR ESTA FUNCION
+};
+
 export const getTaskContent = (e) => {
   let task = e;
   let taskTitle = task.children[0].textContent;
@@ -166,6 +167,7 @@ export const getTaskContent = (e) => {
   return task;
 };
 
+//obtener los datos de la tarea y rellenar el formulario
 const getDataAndFill = (el) => {
   temporalTask = getTaskContent(el);
   localStorage.setItem("taskToEdit", JSON.stringify(temporalTask));
@@ -173,7 +175,6 @@ const getDataAndFill = (el) => {
 };
 
 // segun el primer parametro se deshabilitará o no y el segundo parámetro es el boton que quiero deshabilitar
-
 const disableBtn = (valor = true, btn) => {
   let btnSelected = document.getElementById(btn);
   if (valor && btnSelected) {
@@ -185,26 +186,7 @@ const disableBtn = (valor = true, btn) => {
   }
 };
 
-//! CAMBIAR FUNCION PARA GUARDAR LOS DATOS TEMPORALMENTE EN UN OBJETO
-// const fillFormInputs = (object = {}) => {
-//   let { title, description, state, dateEnd } = getFormInputs();
-
-//   let { taskTitle, taskDescription, taskDate, taskState } = object;
-
-//   if (taskDate) {
-//     dateEnd.value = formatDate(new Date(taskDate));
-//   }
-
-//   if (taskDate && taskDescription && taskState && taskTitle) {
-//     title.value = taskTitle;
-//     description.value = taskDescription;
-//     dateEnd.value = taskDate;
-//     state.value = taskState;
-//   }
-
-//   return { title, description, state, dateEnd };
-// };
-
+//funcion para formatear fecha
 const formatDate = (date) => {
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -212,6 +194,7 @@ const formatDate = (date) => {
   return `${year}-${month}-${day}`;
 };
 
+//funcion para obtener los datos del formulario
 export const getFormInputs = () => {
   let title = document.getElementById("title");
   let description = document.getElementById("description");
@@ -225,16 +208,14 @@ export const getFormInputs = () => {
     dateEnd,
   };
 };
-/*
-Verifica si el titulo existe
-Si existe desabilida la posibilidad de crear
-*/
+
+// funcion para comprobar que exista o no la tarea
 export const verifytaskTitle = (titleParam, e = null) => {
   let currentValue = titleParam || e?.target?.value;
+  const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-  let titleFind = tasksArray.find((el) => {
-    return el.taskTitle == currentValue;
-  });
+  const titleFind = tasks.find((task) => task.title === currentValue);
+
   if (titleFind) {
     disableBtn(true, "createTask");
     disableBtn(false, "editTask");
@@ -259,16 +240,30 @@ export const showMessage = (id) => {
 //funcion para filtrar por estado
 const filterTasks = (e) => {
   let value = e.target.value;
-  const tasks = document.querySelector(".tasks").children;
+  const taskElements = document.querySelector(".tasks").children;
+  let matchCount = 0;
 
-  for (const task of tasks) {
+  // Ocultamos el mensaje anterior si existe
+  const oldMsg = document.querySelector(".emptyP");
+  if (oldMsg) oldMsg.remove();
+
+  for (const task of taskElements) {
     const span = task.querySelectorAll("span")[1];
-    if (span && span.classList.contains(value)) {
+    if (value === "todas" || (span && span.classList.contains(value))) {
       task.style.display = "block";
-    } else if (value === "todas") {
-      task.style.display = "block";
+      matchCount++;
     } else {
       task.style.display = "none";
     }
   }
+
+  // Si no se encontró ninguna tarea visible, mostramos el mensaje
+  if (matchCount === 0) {
+    const sectionEmpty = document.querySelector(".tasks");
+    const p = document.createElement("p");
+    p.classList.add("emptyP");
+    p.textContent = "No hay tareas. ¡Prueba a crear una nueva!";
+    sectionEmpty.appendChild(p);
+  }
 };
+

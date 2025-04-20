@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../style/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/locales-all.global.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="../index.html">Tasks List</a></li>
+                <li><a href="./create.html">Crear</a></li>
+                <li><a href="#" class="active">Eventos</a></li>
+            </ul>
+
+        </nav>
+
+
+        <h2>Mis eventos</h2>
+        <div id="calendar"></div>
+
+
+        <!-- aqui uso la librería full calendar para añadir los eventos -->
+        <script>
+            const calendarEl = document.getElementById('calendar');
+
+            const eventosGuardados = JSON.parse(localStorage.getItem('misEventos')) || [];
+
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'es', 
+                selectable: true,
+                events: eventosGuardados,
+                eventDidMount: function (info) {
+                    const { description, createdAt } = info.event.extendedProps;
+                    if (description || createdAt) {
+                        info.el.title = `${info.event.title}
+                            Descripción: ${description || ''}
+                            Creado el: ${createdAt || ''}`;
+                    }
+                },
+                dateClick: function (info) {
+                    const title = prompt('Nombre del evento:');
+                    if (!title) return;
+
+                    const description = prompt('Descripción del evento:') || '';
+                    const createdAt = new Date().toLocaleString();
+
+                    const newEvent = {
+                        title: title,
+                        start: info.dateStr,
+                        description: description,
+                        createdAt: createdAt
+                    };
+
+                    calendar.addEvent(newEvent);
+
+                    eventosGuardados.push(newEvent);
+                    localStorage.setItem('misEventos', JSON.stringify(savedEvents));
+                }
+            });
+
+            calendar.render();
+        </script>
+    </header>
+</body>
+
+</html>

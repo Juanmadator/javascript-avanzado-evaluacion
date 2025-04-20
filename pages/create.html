@@ -14,6 +14,7 @@
 		<ul>
 			<li><a href="../index.html">Tasks List</a></li>
 			<li><a href="#" class="active">Crear</a></li>
+			<li><a href="./eventos.html">Eventos</a></li>
 			<div id="clima">
 				<h4 id="ciudad" class="spinner"></h4>
 			</div>
@@ -24,8 +25,15 @@
 	 <form>
 	<input type="text" name="title" id="title"  placeholder="Title">
 	<input type="text" name="description" id="description"  placeholder="Description">
-	<input type="text" name="state" id="state" placeholder="State">
+	<!-- <input type="text" name="state" id="state" placeholder="State"> -->
+	<select name="state" id="state">
+		<option value="completado">Completado</option>
+		<option value="en-progreso">En progreso</option>
+		<option value="pendiente">Pendiente</option>
+	</select>
 	<input type="date" name="date-end" id="date-end">
+	
+	</div>
 
 	<button id="createTask" class="btn btn-create">Create</button>
 	<button id="editTask" class="btn btn-edit">Edit</button>
