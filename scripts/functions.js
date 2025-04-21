@@ -85,7 +85,7 @@ export const createTask = (event) => {
       showMessage("taskCreated");
       clearForm();
       setTimeout(() => {
-        window.location.href = "../index.html"; // redirigir al home
+        window.location.reload();  
       }, 500);
     }
   }
