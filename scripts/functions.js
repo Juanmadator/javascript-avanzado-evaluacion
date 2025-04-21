@@ -43,7 +43,7 @@ export const deleteTask = (titulo) => {
   showMessage("taskDeleted");
 
   setTimeout(() => {
-    window.location.href = "../index.html"; // redirigir al home
+    window.location.reload(); 
   }, 100);
 };
 
