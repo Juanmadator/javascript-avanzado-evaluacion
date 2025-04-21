@@ -4,7 +4,7 @@ Este proyecto es una evaluacion para Evolve Academy. Incluye funcionalidades com
 
 ## 🚀 Demo en vivo
 
-👉 [Ver sitio publicado](https://juanmadator.github.io/javascript-avanzado-evaluacion)
+👉 [Ver sitio](https://juanmadator.github.io/javascript-avanzado-evaluacion)
 
 > ⚠️ **Advertencia:** Activar localizacion al usar la página para poder hacer uso de la api de geolocalización sin problemas.
 > 
