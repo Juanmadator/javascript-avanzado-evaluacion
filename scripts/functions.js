@@ -27,7 +27,7 @@ export const updateTask = (event) => {
   showMessage("taskCreated");
 
   setInterval(() => {
-    window.location.href = "./index.html";
+    window.location.reload();
   }, 500);
 };
 
