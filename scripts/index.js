@@ -117,29 +117,39 @@ const getWeather = () => {
       const lat = position.coords.latitude;
       const lon = position.coords.longitude;
 
-      //llamada a una api para obtener la localizacion
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`
-      );
-      const data = await response.json();
+      try {
+        // Sugerencia: Las URLs de las APIs deberían estar en un archivo de configuración
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`
+        );
+        const data = await response.json();
 
-      const city =
-        data.address.city ||
-        data.address.town ||
-        data.address.village ||
-        data.address.county;
+        const city =
+          data.address.city ||
+          data.address.town ||
+          data.address.village ||
+          data.address.county;
 
-      //aqui uso la api para obtener el clima en la ciudad del usuario
-      fetch(`https://wttr.in/${city}?format=3`)
-        .then((res) => res.text())
-        .then((weather) => {
-          document.getElementById("ciudad").textContent = city;
-          document.getElementById("ciudad").classList.remove("spinner");
-          document.getElementById("ciudad").textContent = weather;
-        });
+        // Observación: Sería mejor manejar los errores de la API del clima
+        fetch(`https://wttr.in/${city}?format=3`)
+          .then((res) => res.text())
+          .then((weather) => {
+            document.getElementById("ciudad").textContent = city;
+            document.getElementById("ciudad").classList.remove("spinner");
+            document.getElementById("ciudad").textContent = weather;
+          })
+          .catch(error => {
+            console.error("Error al obtener el clima:", error);
+            // Sugerencia: Mostrar un mensaje de error al usuario
+          });
+      } catch (error) {
+        console.error("Error al obtener ubicación:", error);
+        // Sugerencia: Mostrar un mensaje de error al usuario
+      }
     },
     function (error) {
       console.error("Error al obtener ubicación:", error.message);
+      // Sugerencia: Mostrar un mensaje de error al usuario
     }
   );
 };
@@ -248,28 +258,29 @@ const filterTasks = (e) => {
   const taskElements = document.querySelector(".tasks").children;
   let counter = 0;
 
-  // Ocultamos el mensaje anterior si existe
-  const oldMsg = document.querySelector(".emptyP");
-  if (oldMsg) {
-    oldMsg.remove();
-  }
-
-  for (const task of taskElements) {
-    const span = task.querySelectorAll("span")[1];
-    if (value === "todas" || (span && span.classList.contains(value))) {
+  // Sugerencia: Usar Array.from para convertir la colección HTML en array
+  // y usar métodos de array para el filtrado
+  Array.from(taskElements).forEach((task) => {
+    const state = task.querySelector(".state").textContent.toLowerCase();
+    if (value === "all" || state === value.toLowerCase()) {
       task.style.display = "block";
       counter++;
     } else {
       task.style.display = "none";
     }
-  }
+  });
 
-  // Si no se encontró ninguna tarea visible, mostramos el mensaje
+  // Observación: La lógica de mostrar/ocultar el mensaje de no hay tareas
+  // podría extraerse a una función separada
+  const emptyMessage = document.querySelector(".emptyP");
   if (counter === 0) {
-    const sectionEmpty = document.querySelector(".tasks");
-    const p = document.createElement("p");
-    p.classList.add("emptyP");
-    p.textContent = "No hay tareas. ¡Prueba a crear una nueva!";
-    sectionEmpty.appendChild(p);
+    if (!emptyMessage) {
+      let p = document.createElement("p");
+      p.classList.add("emptyP");
+      p.textContent = "No hay tareas con este estado.";
+      document.querySelector(".tasks").appendChild(p);
+    }
+  } else if (emptyMessage) {
+    emptyMessage.remove();
   }
 };

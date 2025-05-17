@@ -1,6 +1,7 @@
 import { getFormInputs, verifytaskTitle, showMessage } from "./index.js";
 
-//funcion para actualizar la tarea (basada en el titulo)
+// Observación: La función updateTask podría beneficiarse de una mejor validación
+// y manejo de errores antes de actualizar localStorage
 export const updateTask = (event) => {
   event.preventDefault();
   const updatedTask = {
@@ -13,7 +14,8 @@ export const updateTask = (event) => {
   const taskToEdit = JSON.parse(localStorage.getItem("taskToEdit"));
   const allTasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-  //la busco por el titulo y la actualizo con los nuevos valores
+  // Observación: La búsqueda por título podría ser problemática si hay títulos duplicados
+  // Sugerencia: Usar un ID único para identificar tareas
   const updatedTasks = allTasks.map((task) => {
     if (task.title === taskToEdit.taskTitle) {
       return { ...task, ...updatedTask };
@@ -26,12 +28,15 @@ export const updateTask = (event) => {
 
   showMessage("taskCreated");
 
+  // Observación: El uso de setInterval para recargar la página no es la mejor práctica
+  // Sugerencia: Actualizar el DOM directamente
   setInterval(() => {
     window.location.reload();
   }, 500);
 };
 
-//funcion para eliminar la tarea
+// Observación: La función deleteTask podría beneficiarse de una confirmación
+// antes de eliminar la tarea
 export const deleteTask = (titulo) => {
   const allTasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
@@ -42,18 +47,22 @@ export const deleteTask = (titulo) => {
 
   showMessage("taskDeleted");
 
+  // Observación: El uso de setTimeout para recargar la página no es la mejor práctica
+  // Sugerencia: Actualizar el DOM directamente
   setTimeout(() => {
     window.location.reload(); 
   }, 100);
 };
 
-//funcion para crear la tarea
+// Observación: La función createTask podría beneficiarse de una mejor validación
+// y manejo de errores
 export const createTask = (event) => {
   event.preventDefault();
 
   const { title, state, description, dateEnd } = getFormInputs();
 
-  let exists = verifytaskTitle(title.value); // esta función debería verificar si el título ya existe en localStorage
+  // Observación: Sería útil validar que la fecha sea futura
+  let exists = verifytaskTitle(title.value);
   let added = false;
   if (!exists) {
     const validStates = ["completado", "en-progreso", "pendiente"];
@@ -73,6 +82,7 @@ export const createTask = (event) => {
         dateEnd: dateEnd.value,
         state: state.value,
       };
+      // Observación: Sería útil añadir un campo createdAt para tracking
       const currentTasks = JSON.parse(localStorage.getItem("tasks")) || [];
       currentTasks.push(task);
       localStorage.setItem("tasks", JSON.stringify(currentTasks));
@@ -84,6 +94,8 @@ export const createTask = (event) => {
     } else {
       showMessage("taskCreated");
       clearForm();
+      // Observación: El uso de setTimeout para recargar la página no es la mejor práctica
+      // Sugerencia: Actualizar el DOM directamente
       setTimeout(() => {
         window.location.reload();  
       }, 500);
@@ -91,8 +103,11 @@ export const createTask = (event) => {
   }
 };
 
-//funcion para cargar en el dom los elementos dinamicamente
+// Observación: La función createTaskElement podría beneficiarse de un mejor manejo
+// de los estilos y clases
 export const createTaskElement = (title, description, date, state) => {
+  // Observación: La creación de elementos podría simplificarse usando innerHTML
+  // o un template literal
   const div = document.createElement("div");
   div.classList.add("task");
   const article = document.createElement("article");
@@ -114,6 +129,7 @@ export const createTaskElement = (title, description, date, state) => {
   stateSpan.classList.add(state.toLowerCase(), "state");
   stateSpan.textContent = state.charAt(0).toUpperCase() + state.slice(1);
 
+  // Observación: La estructura del DOM podría simplificarse usando un template
   article.appendChild(h4);
   article.appendChild(p);
   article.appendChild(dateSpan);
@@ -124,6 +140,8 @@ export const createTaskElement = (title, description, date, state) => {
   return div;
 };
 
+// Observación: La función clearForm podría beneficiarse de una validación
+// de que los elementos existen antes de limpiarlos
 export const clearForm = () => {
   let { title, state, description } = getFormInputs();
   title.value = "";
@@ -131,9 +149,11 @@ export const clearForm = () => {
   description.value = "";
 };
 
-//funcion para obtener imagen aletoria de rickymotty
+// Observación: La función getRandomCharacters podría beneficiarse de un sistema de caché
+// y un mejor manejo de errores
 export const getRandomCharacters = async (count = 5) => {
   try {
+    // Observación: Sería útil implementar un sistema de caché para los personajes
     const response = await fetch("https://rickandmortyapi.com/api/character");
     const data = await response.json();
     const total = data.info.count;
@@ -151,6 +171,8 @@ export const getRandomCharacters = async (count = 5) => {
       ? charactersData
       : [charactersData];
 
+    // Observación: La creación de elementos del DOM podría optimizarse
+    // usando un DocumentFragment
     characters.forEach((char) => {
       const img = document.createElement("img");
       img.classList.add("rickAndMorty");
@@ -163,5 +185,6 @@ export const getRandomCharacters = async (count = 5) => {
     });
   } catch (error) {
     console.error("Error al obtener personajes:", error);
+    // Observación: Sería útil mostrar un mensaje de error al usuario
   }
 };
